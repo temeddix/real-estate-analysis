@@ -27,4 +27,4 @@ streamlit run main.py
 # Rules
 
 - Please provide proper type hints to function parameters and global variables whenever possible. Also, turn on the basic type checking on the IDE you are using.
-- Use the [Black](https://github.com/psf/black) formatter style.
+- Use the [Black](https://github.com/psf/black) formatter.
