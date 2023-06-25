@@ -1,0 +1,11 @@
+name: real-estate-analysis
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.4
+  - pip=23.1.2
+  - pip:
+      - streamlit==1.23.1
+      - altair==5.0.1
+      - pandas==2.0.2
+      - numpy==1.25.0
