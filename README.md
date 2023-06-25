@@ -4,7 +4,7 @@ This project aims to allow users to find a good land to invest in taking various
 
 # Commands
 
-Make sure [`Miniconda`](https://docs.conda.io/en/latest/miniconda.html) is installed on your system. These commands are exepected to be executed in the project directory.
+Make sure [`Miniconda`](https://docs.conda.io/en/latest/miniconda.html) is installed on your system. These commands are expected to be executed in the project directory.
 
 Create or update the conda environment.
 
