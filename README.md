@@ -21,7 +21,7 @@ conda activate real-estate-analysis
 Run the code.
 
 ```
-streamlit run main.py
+streamlit run home.py
 ```
 
 # Rules
