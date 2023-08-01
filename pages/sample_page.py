@@ -1,6 +1,9 @@
+import asyncio
+
 import streamlit as st
 import aiohttp
-import asyncio
+
+import common
 
 
 # the callback function for the button will add 1 to the
@@ -29,3 +32,21 @@ async def sample_job():
 
 async_output = asyncio.run(sample_job())
 st.code(async_output[:1000], language="html")
+
+
+async def get_open_data():
+    domain = "http://openapi.nsdi.go.kr"
+    path = "/nsdi/BuildingAgeService/attr/getBuildingAge"
+    params = {
+        "authkey": common.API_KEY,
+        "pnu": 1111012500100190000,
+        "format": "json",
+    }
+    async with aiohttp.ClientSession() as session:
+        async with session.get(domain + path, params=params) as response:
+            received = await response.text()
+            return common.format_json(received)
+
+
+async_output = asyncio.run(get_open_data())
+st.code(async_output[:1000], language="json")
