@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import background_work.start
+import background_work
 
 
 st.title("Uber pickups in NYC")
