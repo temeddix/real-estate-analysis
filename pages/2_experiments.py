@@ -30,7 +30,7 @@ async def sample_job():
             return await response.text()
 
 
-async_output = asyncio.run(sample_job())
+async_output: str = asyncio.run(sample_job())
 st.code(async_output[:1000], language="html")
 
 
@@ -48,5 +48,5 @@ async def get_open_data():
             return common.format_json(received)
 
 
-async_output = asyncio.run(get_open_data())
+async_output: str = asyncio.run(get_open_data())
 st.code(async_output[:1000], language="json")
