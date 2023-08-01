@@ -12,4 +12,4 @@ async def do_http_request():
 
                 html = await response.text()
                 print("Body:", html[:15], "...")
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
