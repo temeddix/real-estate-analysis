@@ -1,7 +1,7 @@
 import threading
 import asyncio
 
-from background_work.start import background_main
+from background_work.entry import background_main
 
 
 event_loop = asyncio.new_event_loop()
