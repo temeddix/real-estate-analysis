@@ -1,7 +1,4 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title="Hello world",
-    page_icon="chart_with_upwards_trend",
-    layout="wide",
-)
+st.title("홈")
+st.text("첫 페이지입니다.")
