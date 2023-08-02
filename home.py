@@ -10,8 +10,9 @@ st.map()
 
 st.sidebar.header("투자 계획")
 
-budget = st.sidebar.slider("예산 (억원)", 5, 150, value=20)
-holding_period = st.sidebar.slider("보유 기간 (년)", 0, 20, value=8)
+equity = st.sidebar.slider("자기자본 (억원)", 5, 50, value=12)
+loan = st.sidebar.slider("은행 대출 (억원)", 10, 100, value=18)
+holding_period = st.sidebar.slider("보유 기간 (년)", 2, 20, value=8)
 
 st.sidebar.header("요인")
 
