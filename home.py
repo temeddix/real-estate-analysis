@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-import background_work
-
 
 st.sidebar.header("투자 계획")
 
