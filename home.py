@@ -32,7 +32,7 @@ st.pydeck_chart(
         initial_view_state=pdk.ViewState(
             latitude=37.5519,
             longitude=126.9918,
-            zoom=10,
+            zoom=8,
         ),
         tooltip={
             "text": "{text}\nTemporary ID: {id}",
