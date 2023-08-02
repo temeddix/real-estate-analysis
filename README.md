@@ -8,16 +8,10 @@ As this project is interested in Korean lands, all user interface texts will be 
 
 Make sure [`Miniconda`](https://docs.conda.io/en/latest/miniconda.html) is installed on your system. These commands are expected to be executed in the project directory.
 
-Create or update the conda environment.
+Install dependencies
 
 ```
-conda env update --file environment.yml
-```
-
-Activate the conda environment.
-
-```
-conda activate real-estate-analysis
+pip install -r requirements.txt
 ```
 
 Run the code.
