@@ -1,21 +1,32 @@
 import streamlit as st
 import pandas as pd
-import datetime
+import numpy as np
 
 import background_work
 
-st.map()
 
 st.sidebar.header("투자 계획")
 
 equity = st.sidebar.slider("자기자본 (만원)", 50000, 500000, value=120000, step=5000)
-loan = st.sidebar.slider("은행 대출 (만원)", 100000, 1000000, value=180000, step=5000)
+loan = st.sidebar.slider("은행 대출 한도 (만원)", 100000, 1000000, value=180000, step=5000)
 
 st.sidebar.header("요인")
 
 construction_cost = st.sidebar.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
 interest_rate = st.sidebar.slider("금리 (%)", 0.0, 10.0, value=3.0)
 construction_cost = st.sidebar.slider("공실률 (%)", 0, 40, value=10)
+
+st.checkbox("예산 내의 필지만 표시하기")
+
+df = pd.DataFrame(
+    {
+        "lat": np.random.randn(1000) / 50 + 37.5519,
+        "long": np.random.randn(1000) / 50 + 126.9918,
+        "col": np.random.rand(1000, 4).tolist(),
+    }
+)
+
+st.map(df, latitude="latitude", longitude="long", size=3, color="col")
 
 st.markdown(
     r"""
