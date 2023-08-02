@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pydeck as pdk
 
 
 st.sidebar.header("투자 계획")
 
-equity = st.sidebar.slider("자기자본 (만원)", 50000, 500000, value=120000, step=5000)
-loan = st.sidebar.slider("은행 대출 한도 (만원)", 100000, 1000000, value=180000, step=5000)
+equity = st.sidebar.slider("자기자본 (억원)", 5, 50, value=12) * 10000
+loan = st.sidebar.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
 
 st.sidebar.header("요인")
 
@@ -16,15 +17,55 @@ construction_cost = st.sidebar.slider("공실률 (%)", 0, 40, value=10)
 
 st.checkbox("예산 내의 필지만 표시하기")
 
-df = pd.DataFrame(
+map_data = pd.DataFrame(
     {
         "lat": np.random.randn(1000) / 50 + 37.5519,
-        "long": np.random.randn(1000) / 50 + 126.9918,
-        "col": np.random.rand(1000, 4).tolist(),
+        "lon": np.random.randn(1000) / 50 + 126.9918,
+        "id": np.arange(1000),
+        "text": "Some land info...",
     }
 )
 
-st.map(df, latitude="latitude", longitude="long", size=3, color="col")
+st.pydeck_chart(
+    pdk.Deck(
+        map_style="dark",  # type: ignore
+        initial_view_state=pdk.ViewState(
+            latitude=37.5519,
+            longitude=126.9918,
+            zoom=10,
+        ),
+        tooltip={
+            "text": "{text}\nTemporary ID: {id}",
+            "style": {
+                "color": "white",
+                "backgroundColor": "rgb(30,30,30)",
+                "border": "1px solid rgba(255,255,255,0.2)",
+                "borderRadius": "8px",
+                "boxShadow": "0px 5px 5px black",
+            },
+        },  # type: ignore
+        layers=[
+            pdk.Layer(
+                "HeatmapLayer",
+                data=map_data,
+                opacity=0.2,
+                get_position=["lon", "lat"],
+                aggregation="MEAN",
+                get_weight="id / 1000",
+                threshold=0.6,
+            ),
+            pdk.Layer(
+                "ScatterplotLayer",
+                data=map_data,
+                get_position="[lon, lat]",
+                radius_pixels=4,
+                get_color="[255,255,255,id/3]",
+                get_radius=8,
+                pickable=True,
+            ),
+        ],
+    ),
+)
 
 st.markdown(
     r"""
