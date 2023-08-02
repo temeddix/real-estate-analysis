@@ -11,7 +11,7 @@ Make sure [`Miniconda`](https://docs.conda.io/en/latest/miniconda.html) is insta
 Create or update the conda environment.
 
 ```
-conda env update --file environment.yaml
+conda env update --file environment.yml
 ```
 
 Activate the conda environment.
