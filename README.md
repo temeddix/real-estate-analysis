@@ -6,7 +6,7 @@ As this project is interested in Korean lands, all user interface texts will be 
 
 # Commands
 
-Make sure [`Miniconda`](https://docs.conda.io/en/latest/miniconda.html) is installed on your system. These commands are expected to be executed in the project directory.
+Make sure Python is installed on your system. These commands are expected to be executed in the project directory.
 
 Install dependencies
 
