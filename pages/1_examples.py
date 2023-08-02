@@ -5,6 +5,9 @@ import numpy as np
 st.write(
     "다양한 아이디어와 코드 예시는 [Streamlit 공식 갤러리](https://streamlit.io/gallery)에서 보실 수 있습니다."
 )
+st.write(
+    "코드 작성법은 [Streamlit 공식 문서](https://docs.streamlit.io/library/get-started)에서 보실 수 있습니다."
+)
 
 
 st.title("Uber pickups in NYC")

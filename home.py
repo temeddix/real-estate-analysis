@@ -4,38 +4,44 @@ import datetime
 
 import background_work
 
-st.title("홈")
-st.text("첫 페이지입니다.")
+st.set_page_config(layout="wide")
 
+st.map()
 
-# create the slider
-slide_val = st.slider("보유기간", 0, 20, key="holding_period", value=8)
+st.sidebar.header("투자 계획")
+
+budget = st.sidebar.slider("예산 (억원)", 5, 150, value=20)
+holding_period = st.sidebar.slider("보유 기간 (년)", 0, 20, value=8)
+
+st.sidebar.header("요인")
+
+construction_cost = st.sidebar.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
+interest_rate = st.sidebar.slider("금리 (%)", 0.0, 10.0, value=3.0)
+construction_cost = st.sidebar.slider("공실률 (%)", 0, 40, value=10)
 
 
 prediction = pd.DataFrame(
     columns=[
-        "자금유입/대출신청",
-        "자금유입/임대수익/보증금",
-        "자금유입/임대수익/월세",
-        "자금유입/매각",
-        "자금유입/합계",
-        "자금지출/대출/이자",
-        "자금지출/대출/상환",
-        "자금지출/초기비용/필지매입",
-        "자금지출/초기비용/공사",
-        "자금지출/기타",
-        "자금지출/재산세",
-        "자금지출/합계",
-        "현금흐름",
-        "누계",
-        "대출",
+        "I/대출신청",
+        "I/임대수익/보증금",
+        "I/임대수익/월세",
+        "I/매각",
+        "I/합계",
+        "O/대출/이자",
+        "O/대출/상환",
+        "O/초기비용/필지매입",
+        "O/초기비용/공사",
+        "O/기타",
+        "O/재산세",
+        "O/합계",
+        "S/현금흐름",
+        "S/누계",
+        "S/대출",
         "IRR(내부수익률)",
     ],
-    index=[
-        datetime.datetime.now().year + i
-        for i in range(st.session_state["holding_period"])
-    ],
+    index=[datetime.datetime.now().year + i for i in range(holding_period)],
     dtype="int32",
 )
 
 st.write(prediction)
+st.caption("I는 현금 유입을, O는 현금 지출을 의미합니다. S는 정리된 결과입니다.")
