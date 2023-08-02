@@ -4,15 +4,12 @@ import datetime
 
 import background_work
 
-st.set_page_config(layout="wide")
-
 st.map()
 
 st.sidebar.header("투자 계획")
 
-equity = st.sidebar.slider("자기자본 (억원)", 5, 50, value=12)
-loan = st.sidebar.slider("은행 대출 (억원)", 10, 100, value=18)
-holding_period = st.sidebar.slider("보유 기간 (년)", 2, 20, value=8)
+equity = st.sidebar.slider("자기자본 (만원)", 50000, 500000, value=120000, step=5000)
+loan = st.sidebar.slider("은행 대출 (만원)", 100000, 1000000, value=180000, step=5000)
 
 st.sidebar.header("요인")
 
@@ -20,29 +17,39 @@ construction_cost = st.sidebar.slider("제곱미터당 공사비 (만원)", 200,
 interest_rate = st.sidebar.slider("금리 (%)", 0.0, 10.0, value=3.0)
 construction_cost = st.sidebar.slider("공실률 (%)", 0, 40, value=10)
 
-
-prediction = pd.DataFrame(
-    columns=[
-        "I/대출신청",
-        "I/임대수익/보증금",
-        "I/임대수익/월세",
-        "I/매각",
-        "I/합계",
-        "O/대출/이자",
-        "O/대출/상환",
-        "O/초기비용/필지매입",
-        "O/초기비용/공사",
-        "O/기타",
-        "O/재산세",
-        "O/합계",
-        "S/현금흐름",
-        "S/누계",
-        "S/대출",
-        "IRR(내부수익률)",
-    ],
-    index=[datetime.datetime.now().year + i for i in range(holding_period)],
-    dtype="int32",
+st.markdown(
+    r"""
+이 시스템은 예상 연면적과 해당 지역 데이터를 기반으로 대략적인 월세를 계산한 후, 여러 요인을 계산에 포함하여 내부수익률을 산출한 후 지도에 표시합니다.
+"""
 )
+st.latex(
+    r"""
+F = A*f*(1-v/100)
+\\
+R = F - 0.05*F - t(p) - i*l
+\\
+r = \frac{R}{e}*100
+""",
+)
+st.markdown(
+    r"""
+계산 과정에서 도출되는 변수들은 다음과 같습니다.
 
-st.write(prediction)
-st.caption("I는 현금 유입을, O는 현금 지출을 의미합니다. S는 정리된 결과입니다.")
+- F: 건물 전체 월세
+- R: 연간 순수익 (만원)
+- r: IRR, 내부수익률 (%)
+
+외부 데이터 또는 입력값으로 생성되는 변수는 다음과 같습니다.
+
+- A: 연면적 (제곱미터) - 공공데이터 용도지역으로 추정
+- f: 제곱미터당 월세 (만원) - 공공데이터 자료
+- t(): 세율 구간을 고려한 재산세
+- p: 공시지가
+- e: 자기자본금 (만원)
+- i: 금리
+- l: 은행 대출
+- v: 공실률 (%)
+
+이 시스템은 공공데이터와 입력값을 바탕으로 해당 지역의 상가 부동산 수익성을 분석합니다. 일조권 사선, 개발 정보, 치안, 문화 등의 세부적인 요소들은 반영되지 않습니다.
+"""
+)
