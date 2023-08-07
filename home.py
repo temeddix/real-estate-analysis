@@ -38,10 +38,10 @@ st.pydeck_chart(
             "text": "{text}\nTemporary ID: {id}",
             "style": {
                 "color": "white",
-                "backgroundColor": "rgb(30,30,30)",
-                "border": "1px solid rgba(255,255,255,0.2)",
+                "backgroundColor": "rgb(38, 39, 48)",
                 "borderRadius": "8px",
-                "boxShadow": "0px 5px 5px black",
+                "boxShadow": "0px 4px 20px black",
+                "padding": "16px 24px",
             },
         },  # type: ignore
         layers=[
