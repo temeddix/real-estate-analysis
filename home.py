@@ -6,58 +6,64 @@ import pydeck as pdk
 
 st.set_page_config(layout="wide")
 
-land_data = pd.DataFrame(
-    {
-        "lat": np.random.randn(50000) / 50 + 37.5519,
-        "lon": np.random.randn(50000) / 50 + 126.9918,
-        "id": np.arange(50000),
-        "text": "필지 정보...",
-    }
-)
-deck = pdk.Deck(
-    map_style="dark",
-    initial_view_state=pdk.ViewState(
-        latitude=37.5519, longitude=126.9918, zoom=8, controller=True
-    ),
-    tooltip={
-        "text": "{text}\n임시 ID: {id}",
-        "style": {
-            "color": "white",
-            "backgroundColor": "rgb(38,39,48)",
-            "borderRadius": "8px",
-            "boxShadow": "0px 4px 20px rgba(0,0,0,0.75)",
-            "padding": "16px 24px",
-        },
-    },  # type: ignore
-    layers=[
-        pdk.Layer(
-            "HeatmapLayer",
-            data=land_data,
-            opacity=0.1,
-            get_position=["lon", "lat"],
-            aggregation="MEAN",
-            get_weight="id / 1000",
-            threshold=0.6,
-            color_range=[
-                [63, 0, 0],
-                [255, 63, 0],
-                [255, 191, 0],
-                [255, 255, 191],
-            ],
+
+@st.cache_data
+def draw_map() -> str:
+    land_data = pd.DataFrame(
+        {
+            "lat": np.random.randn(50000) / 50 + 37.5519,
+            "lon": np.random.randn(50000) / 50 + 126.9918,
+            "id": np.arange(50000),
+            "text": "필지 정보...",
+        }
+    )
+    deck = pdk.Deck(
+        map_style="dark",
+        initial_view_state=pdk.ViewState(
+            latitude=37.5519, longitude=126.9918, zoom=8, controller=True
         ),
-        pdk.Layer(
-            "ScatterplotLayer",
-            data=land_data,
-            get_position=["lon", "lat"],
-            point_size=3,
-            get_color=[255, 255, 255, "id/30"],
-            pickable=True,
-            auto_highlight=True,
-        ),
-    ],
-)
-html_content: str = deck.to_html(as_string=True)  # type:ignore
-components.html(html_content, height=600)
+        tooltip={
+            "text": "{text}\n임시 ID: {id}",
+            "style": {
+                "color": "white",
+                "backgroundColor": "rgb(38,39,48)",
+                "borderRadius": "8px",
+                "boxShadow": "0px 4px 20px rgba(0,0,0,0.75)",
+                "padding": "16px 24px",
+            },
+        },  # type: ignore
+        layers=[
+            pdk.Layer(
+                "HeatmapLayer",
+                data=land_data,
+                opacity=0.1,
+                get_position=["lon", "lat"],
+                aggregation="MEAN",
+                get_weight="id / 1000",
+                threshold=0.6,
+                color_range=[
+                    [63, 0, 0],
+                    [255, 63, 0],
+                    [255, 191, 0],
+                    [255, 255, 191],
+                ],
+            ),
+            pdk.Layer(
+                "ScatterplotLayer",
+                data=land_data,
+                get_position=["lon", "lat"],
+                point_size=3,
+                get_color=[255, 255, 255, "id/30"],
+                pickable=True,
+                auto_highlight=True,
+            ),
+        ],
+    )
+    html_content: str = deck.to_html(as_string=True)  # type:ignore
+    return html_content
+
+
+a = components.html(draw_map(), height=600)
 
 input_column, info_column, guide_column = st.columns((1, 2, 1))
 
