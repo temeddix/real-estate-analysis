@@ -2,13 +2,20 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
-import pydeck as pdk
+import pydeck
 
 st.set_page_config(layout="wide")
 
+if "equity" not in st.session_state.keys():
+    st.session_state["equity"] = 12  # 자기자본
+    st.session_state["loan"] = 20  # 은행 대출 한도
+    st.session_state["construction_cost"] = 280  # 제곱미터당 공사비
+    st.session_state["interest_rate"] = 3.0  # 금리
+    st.session_state["empty_ratio"] = 10  # 공실률
+
 
 @st.cache_data
-def draw_map() -> str:
+def draw_map(equity: int, loan: int) -> str:
     land_data = pd.DataFrame(
         {
             "lat": np.random.randn(50000) / 50 + 37.5519,
@@ -17,10 +24,13 @@ def draw_map() -> str:
             "text": "필지 정보...",
         }
     )
-    deck = pdk.Deck(
+    deck = pydeck.Deck(
         map_style="dark",
-        initial_view_state=pdk.ViewState(
-            latitude=37.5519, longitude=126.9918, zoom=8, controller=True
+        initial_view_state=pydeck.ViewState(
+            latitude=37.5519,
+            longitude=126.9918,
+            zoom=8,
+            controller=True,
         ),
         tooltip={
             "text": "{text}\n임시 ID: {id}",
@@ -33,7 +43,7 @@ def draw_map() -> str:
             },
         },  # type: ignore
         layers=[
-            pdk.Layer(
+            pydeck.Layer(
                 "HeatmapLayer",
                 data=land_data,
                 opacity=0.1,
@@ -48,7 +58,7 @@ def draw_map() -> str:
                     [255, 255, 191],
                 ],
             ),
-            pdk.Layer(
+            pydeck.Layer(
                 "ScatterplotLayer",
                 data=land_data,
                 get_position=["lon", "lat"],
@@ -63,21 +73,24 @@ def draw_map() -> str:
     return html_content
 
 
-a = components.html(draw_map(), height=600)
+a = components.html(
+    draw_map(
+        st.session_state["equity"],
+        st.session_state["loan"],
+    ),
+    height=600,
+)
 
 input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
 input_column.header("요인 입력")
-
 input_column.subheader("투자 계획")
-equity = input_column.slider("자기자본 (억원)", 5, 50, value=12) * 10000
-loan = input_column.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
-
+input_column.slider("자기자본 (억원)", 5, 50, key="equity")
+input_column.slider("은행 대출 한도 (억원)", 10, 100, key="loan")
 input_column.subheader("변수")
-construction_cost = input_column.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
-interest_rate = input_column.slider("금리 (%)", 0.0, 10.0, value=3.0)
-construction_cost = input_column.slider("공실률 (%)", 0, 40, value=10)
-
+input_column.slider("제곱미터당 공사비 (만원)", 200, 400, key="construction_cost")
+input_column.slider("금리 (%)", 0.0, 10.0, key="interest_rate")
+input_column.slider("공실률 (%)", 0, 40, key="empty_ratio")
 input_column.subheader("필터")
 input_column.checkbox("예산 내의 필지만 표시하기")
 
@@ -85,7 +98,6 @@ info_column.header("정보")
 info_column.text_input("필지 ID를 입력하세요.", value="")
 
 guide_column.header("안내")
-
 guide_column.markdown(
     r"""
 이 시스템은 예상 연면적과 해당 지역의 공공데이터를 기반으로 대략적인 월세를 계산한 후,
