@@ -19,7 +19,7 @@ def format_json(input: str, item_limit: int = 5) -> str:
     )
 
 
-def convert_size(size_bytes):
+def convert_size(size_bytes) -> str:
     if size_bytes == 0:
         return "0B"
     size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
@@ -29,7 +29,7 @@ def convert_size(size_bytes):
     return "%s %s" % (s, size_name[i])
 
 
-def read_geofile(path: str):
+def read_geofile(path: str) -> geopandas.GeoDataFrame:
     processed_filepath = f"./processed_data/{path}.parquet"
 
     if os.path.isfile(processed_filepath):
