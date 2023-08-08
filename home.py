@@ -27,14 +27,11 @@ def draw_map(equity: int, loan: int) -> str:
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
     # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
     geo_data: geopandas.GeoDataFrame = geo_data.to_crs(epsg=4326)  # type:ignore
-    land_data = pd.DataFrame(
-        {
-            "lat": np.random.randn(50000) / 50 + 37.5519,
-            "lon": np.random.randn(50000) / 50 + 126.9918,
-            "id": np.arange(50000),
-            "text": "필지 정보...",
-        }
-    )
+
+    # 해당 대지를 그리는 폴리곤 데이터의 평균으로 위도와 경도 행을 추가합니다.
+    geo_data["lat"] = geo_data["geometry"].centroid.y  # type:ignore
+    geo_data["lon"] = geo_data["geometry"].centroid.x  # type:ignore
+
     deck = pydeck.Deck(
         map_style="dark",
         initial_view_state=pydeck.ViewState(
@@ -56,11 +53,11 @@ def draw_map(equity: int, loan: int) -> str:
         layers=[
             pydeck.Layer(
                 "HeatmapLayer",
-                data=land_data,
+                data=geo_data,
                 opacity=0.1,
                 get_position=["lon", "lat"],
                 aggregation="MEAN",
-                get_weight="id / 1000",
+                get_weight="A11/1000",
                 threshold=0.6,
                 color_range=[
                     [63, 0, 0],
@@ -68,13 +65,6 @@ def draw_map(equity: int, loan: int) -> str:
                     [255, 191, 0],
                     [255, 255, 191],
                 ],
-            ),
-            pydeck.Layer(
-                "ScatterplotLayer",
-                data=land_data,
-                get_position=["lon", "lat"],
-                point_size=3,
-                get_color=[255, 255, 255, "id/30"],
             ),
             pydeck.Layer(
                 "GeoJsonLayer",
