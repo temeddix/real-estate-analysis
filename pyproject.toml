@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Analyzing Korean real-estate dynamically with public open data"
 authors = ["Hyunsung Ro ", "DongHyun Kim <temeddix@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "pages" }]
 
 [tool.poetry.dependencies]
 python = "^3.9.15"
