@@ -44,7 +44,7 @@ def draw_map(equity: int, loan: int) -> str:
             controller=True,
         ),
         tooltip={
-            "text": "{A16}\nID: {A0}",
+            "text": "{A2} {A5}\nID: {A0}\n{A16}\n{A18}\n{A22}",
             "style": {
                 "color": "white",
                 "backgroundColor": "rgb(38,39,48)",
