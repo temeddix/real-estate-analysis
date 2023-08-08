@@ -15,7 +15,7 @@ altair = "4.2.2"
 pandas = "2.0.2"
 numpy = "1.25.0"
 aiohttp = "3.8.5"
-geopandas = "^0.13.2"
+geopandas = "0.13.2"
 
 [build-system]
 requires = ["poetry-core"]
