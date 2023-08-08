@@ -6,6 +6,7 @@ import pydeck
 import geopandas
 
 from recipe.common import convert_size
+from recipe.common import read_geofile
 
 st.set_page_config(layout="wide")
 
@@ -20,10 +21,7 @@ if "is_session_ready" not in st.session_state.keys():
 
 @st.cache_data
 def draw_map(equity: int, loan: int) -> str:
-    geo_data = geopandas.read_file(
-        "./open_data/announced_land_price/AL_11_D152_20220929.shp",
-        encoding="euc-kr",
-    )
+    geo_data = read_geofile("announced_land_price/AL_11_D152_20220929")
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
     # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
     geo_data = geo_data.to_crs(epsg=4326)

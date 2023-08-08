@@ -1,5 +1,7 @@
 import json
 import math
+import os
+import geopandas
 
 
 def format_json(input: str, item_limit: int = 5) -> str:
@@ -25,3 +27,20 @@ def convert_size(size_bytes):
     p = math.pow(1024, i)
     s = round(size_bytes / p, 2)
     return "%s %s" % (s, size_name[i])
+
+
+def read_geofile(path: str):
+    processed_filepath = f"./processed_data/{path}.parquet"
+
+    if os.path.isfile(processed_filepath):
+        geo_data = geopandas.read_parquet(processed_filepath)
+    else:
+        geo_data = geopandas.read_file(
+            f"./open_data/{path}.shp",
+            encoding="euc-kr",
+        )
+        processed_directory = os.path.dirname(processed_filepath)
+        os.makedirs(processed_directory, exist_ok=True)
+        geo_data.to_parquet(processed_filepath)
+
+    return geo_data
