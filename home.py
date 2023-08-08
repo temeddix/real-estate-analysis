@@ -22,7 +22,7 @@ map_data = pd.DataFrame(
         "lat": np.random.randn(1000) / 50 + 37.5519,
         "lon": np.random.randn(1000) / 50 + 126.9918,
         "id": np.arange(1000),
-        "text": "Some land info...",
+        "text": "필지 정보...",
     }
 )
 
@@ -39,7 +39,7 @@ deck = pdk.Deck(
         zoom=8,
     ),
     tooltip={
-        "text": "{text}\nTemporary ID: {id}",
+        "text": "{text}\n임시 ID: {id}",
         "style": {
             "color": "white",
             "backgroundColor": "rgb(38,39,48)",
