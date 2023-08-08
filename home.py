@@ -97,7 +97,7 @@ html_content = draw_map(
 )
 components.html(
     html_content,
-    height=600,
+    height=720,
 )
 html_size = convert_size(len(html_content.encode("utf-8")))
 st.caption(f"지도 데이터 용량은 {html_size}입니다.")
