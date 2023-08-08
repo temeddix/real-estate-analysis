@@ -3,7 +3,7 @@ import asyncio
 import streamlit as st
 import aiohttp
 
-import common
+import recipe.common as common
 
 
 # the callback function for the button will add 1 to the
