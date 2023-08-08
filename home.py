@@ -72,6 +72,8 @@ def draw_map(equity: int, loan: int) -> str:
                 data=geo_data,
                 opacity=0.8,
                 filled=True,
+                extruded=True,
+                get_elevation="A11/10",
                 get_fill_color=[255, 0, 0],
                 pickable=True,
                 auto_highlight=True,
