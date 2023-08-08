@@ -5,6 +5,8 @@ import numpy as np
 import pydeck
 import geopandas
 
+pd.set_option("display.max_columns", None)
+
 from recipe.common import convert_size
 from recipe.common import read_geofile
 
@@ -24,7 +26,7 @@ def draw_map(equity: int, loan: int) -> str:
     geo_data = read_geofile("announced_land_price/AL_11_D152_20220929")
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
     # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
-    geo_data = geo_data.to_crs(epsg=4326)
+    geo_data: geopandas.GeoDataFrame = geo_data.to_crs(epsg=4326)  # type:ignore
     land_data = pd.DataFrame(
         {
             "lat": np.random.randn(50000) / 50 + 37.5519,
@@ -42,7 +44,7 @@ def draw_map(equity: int, loan: int) -> str:
             controller=True,
         ),
         tooltip={
-            "text": "{text}\n임시 ID: {id}",
+            "text": "{A16}\nID: {A0}",
             "style": {
                 "color": "white",
                 "backgroundColor": "rgb(38,39,48)",
