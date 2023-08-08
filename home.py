@@ -60,9 +60,9 @@ def draw_map(equity: int, loan: int) -> str:
                 get_weight="A11/1000",
                 threshold=0.6,
                 color_range=[
-                    [63, 0, 0],
-                    [255, 63, 0],
-                    [255, 191, 0],
+                    [0, 63, 0],
+                    [63, 255, 0],
+                    [191, 255, 0],
                     [255, 255, 191],
                 ],
             ),
