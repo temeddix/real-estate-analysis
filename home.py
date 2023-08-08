@@ -3,6 +3,9 @@ import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import pydeck
+import geopandas
+
+from recipe.common import convert_size
 
 st.set_page_config(layout="wide")
 
@@ -17,6 +20,13 @@ if "is_session_ready" not in st.session_state.keys():
 
 @st.cache_data
 def draw_map(equity: int, loan: int) -> str:
+    geo_data = geopandas.read_file(
+        "./open_data/basic_building_info/AL_11_D162_20230120.shp",
+        encoding="euc-kr",
+    )
+    # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
+    # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
+    geo_data = geo_data.to_crs(epsg=4326)
     land_data = pd.DataFrame(
         {
             "lat": np.random.randn(50000) / 50 + 37.5519,
@@ -68,19 +78,29 @@ def draw_map(equity: int, loan: int) -> str:
                 pickable=True,
                 auto_highlight=True,
             ),
+            pydeck.Layer(
+                "GeoJsonLayer",
+                data=geo_data,
+                opacity=0.8,
+                filled=True,
+                get_fill_color=[255, 0, 0],
+            ),
         ],
     )
     html_content: str = deck.to_html(as_string=True)  # type:ignore
     return html_content
 
 
-a = components.html(
-    draw_map(
-        st.session_state["equity"],
-        st.session_state["loan"],
-    ),
+html_content = draw_map(
+    st.session_state["equity"],
+    st.session_state["loan"],
+)
+components.html(
+    html_content,
     height=600,
 )
+html_size = convert_size(len(html_content.encode("utf-8")))
+st.caption(f"지도 용량은 {html_size}입니다.")
 
 input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
