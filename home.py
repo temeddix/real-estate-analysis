@@ -9,6 +9,7 @@ pd.set_option("display.max_columns", None)
 
 from recipe.common import convert_size
 from recipe.common import read_geofile
+from recipe.common import insert_custom_css
 
 st.set_page_config(layout="wide")
 
@@ -78,6 +79,8 @@ def draw_map(equity: int, loan: int) -> str:
         ],
     )
     html_content: str = deck.to_html(as_string=True)  # type:ignore
+    custom_css = "body { font-family: sans-serif; }"
+    html_content = insert_custom_css(html_content, custom_css)
     return html_content
 
 

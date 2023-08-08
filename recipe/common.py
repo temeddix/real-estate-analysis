@@ -44,3 +44,24 @@ def read_geofile(path: str) -> geopandas.GeoDataFrame:
         geo_data.to_parquet(processed_filepath)
 
     return geo_data
+
+
+def insert_custom_css(html_string: str, custom_css: str) -> str:
+    # Find the position to insert the custom CSS
+    head_position = html_string.find("<head>")
+    if head_position == -1:
+        # If <head> is not found, insert the <style> tag at the beginning of the HTML
+        head_position = 0
+    else:
+        head_position += len("<head>")
+
+    # Insert the custom CSS inside the <head> section
+    modified_html = (
+        html_string[:head_position]
+        + "<style>"
+        + custom_css
+        + "</style>"
+        + html_string[head_position:]
+    )
+
+    return modified_html
