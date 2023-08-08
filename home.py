@@ -33,11 +33,17 @@ deck = pdk.Deck(
         pdk.Layer(
             "HeatmapLayer",
             data=map_data,
-            opacity=0.2,
+            opacity=0.1,
             get_position=["lon", "lat"],
             aggregation="MEAN",
             get_weight="id / 1000",
             threshold=0.6,
+            color_range=[
+                [63, 0, 0],
+                [255, 63, 0],
+                [255, 191, 0],
+                [255, 255, 191],
+            ],
         ),
         pdk.Layer(
             "ScatterplotLayer",
