@@ -26,50 +26,56 @@ map_data = pd.DataFrame(
     }
 )
 
-st.pydeck_chart(
-    pdk.Deck(
-        map_style="dark",  # type: ignore
-        initial_view_state=pdk.ViewState(
-            latitude=37.5519,
-            longitude=126.9918,
-            zoom=8,
-        ),
-        tooltip={
-            "text": "{text}\nTemporary ID: {id}",
-            "style": {
-                "color": "white",
-                "backgroundColor": "rgb(38, 39, 48)",
-                "borderRadius": "8px",
-                "boxShadow": "0px 4px 20px black",
-                "padding": "16px 24px",
-            },
-        },  # type: ignore
-        layers=[
-            pdk.Layer(
-                "HeatmapLayer",
-                data=map_data,
-                opacity=0.2,
-                get_position=["lon", "lat"],
-                aggregation="MEAN",
-                get_weight="id / 1000",
-                threshold=0.6,
-            ),
-            pdk.Layer(
-                "ScatterplotLayer",
-                data=map_data,
-                get_position="[lon, lat]",
-                radius_pixels=4,
-                get_color="[255,255,255,id/3]",
-                get_radius=8,
-                pickable=True,
-            ),
-        ],
+
+def on_point_click(widget_instance, payload):
+    print("YAHOO")
+
+
+deck = pdk.Deck(
+    map_style="dark",  # type: ignore
+    initial_view_state=pdk.ViewState(
+        latitude=37.5519,
+        longitude=126.9918,
+        zoom=8,
     ),
+    tooltip={
+        "text": "{text}\nTemporary ID: {id}",
+        "style": {
+            "color": "white",
+            "backgroundColor": "rgb(38,39,48)",
+            "borderRadius": "8px",
+            "boxShadow": "0px 4px 20px rgba(0,0,0,0.75)",
+            "padding": "16px 24px",
+        },
+    },  # type: ignore
+    layers=[
+        pdk.Layer(
+            "HeatmapLayer",
+            data=map_data,
+            opacity=0.2,
+            get_position=["lon", "lat"],
+            aggregation="MEAN",
+            get_weight="id / 1000",
+            threshold=0.6,
+        ),
+        pdk.Layer(
+            "ScatterplotLayer",
+            data=map_data,
+            get_position="[lon, lat]",
+            radius_pixels=4,
+            get_color="[255,255,255,id/3]",
+            get_radius=8,
+            pickable=True,
+        ),
+    ],
 )
+deck.deck_widget.on_click(on_point_click)
+st.pydeck_chart(deck)
 
 st.markdown(
     r"""
-이 시스템은 예상 연면적과 해당 지역의 공공데이터를 기반으로 대략적인 월세를 계산한 후, 현금 지출을 차감하여 내부수익률을 산출한 후 지도에 표시합니다.
+이 시스템은 예상 연면적과 해당 지역의 공공데이터를 기반으로 대략적인 월세를 계산한 후,
+현금 지출을 차감하여 내부수익률을 산출한 후 지도에 표시합니다.
 """
 )
 st.latex(
@@ -100,6 +106,8 @@ st.markdown(
 - l: 은행 대출
 - v: 공실률 (%)
 
-이 시스템은 공공데이터와 입력값만을 사용하여 해당 지역의 상가 부동산 수익성을 분석합니다. 일조권 사선, 개발 정보, 치안, 문화 등의 세부적인 요소들은 반영되지 않습니다. 각각의 필지의 특성을 파악하기 위해선 사설 서비스 이용, 답사 등 별도의 조사가 필요합니다.
+이 시스템은 공공데이터와 입력값만을 사용하여 해당 지역의 상가 부동산 수익성을 분석합니다.
+일조권 사선, 개발 정보, 치안, 문화 등의 세부적인 요소들은 반영되지 않습니다.
+각각의 필지의 특성을 파악하기 위해선 사설 서비스 이용, 답사 등 별도의 조사가 필요합니다.
 """
 )
