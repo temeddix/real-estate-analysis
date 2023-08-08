@@ -93,7 +93,7 @@ components.html(
     height=720,
 )
 html_size = convert_size(len(html_content.encode("utf-8")))
-st.caption(f"다운로드된 필지 데이터의 용량은 {html_size}입니다.")
+st.caption(f"내부적으로 생성된 필지 데이터의 용량은 {html_size}입니다.")
 
 input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
