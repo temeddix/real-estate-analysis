@@ -6,7 +6,7 @@ import pydeck as pdk
 
 st.set_page_config(layout="wide")
 
-map_data = pd.DataFrame(
+land_data = pd.DataFrame(
     {
         "lat": np.random.randn(50000) / 50 + 37.5519,
         "lon": np.random.randn(50000) / 50 + 126.9918,
@@ -32,7 +32,7 @@ deck = pdk.Deck(
     layers=[
         pdk.Layer(
             "HeatmapLayer",
-            data=map_data,
+            data=land_data,
             opacity=0.1,
             get_position=["lon", "lat"],
             aggregation="MEAN",
@@ -47,7 +47,7 @@ deck = pdk.Deck(
         ),
         pdk.Layer(
             "ScatterplotLayer",
-            data=map_data,
+            data=land_data,
             get_position=["lon", "lat"],
             point_size=3,
             get_color=[255, 255, 255, "id/30"],
@@ -59,33 +59,34 @@ deck = pdk.Deck(
 html_content: str = deck.to_html(as_string=True)  # type:ignore
 components.html(html_content, height=600)
 
-side, info, guide = st.columns((1, 2, 1))
+input_column, info_column, guide_column = st.columns((1, 2, 1))
 
-side.header("요인 입력")
+input_column.header("요인 입력")
 
-side.subheader("투자 계획")
-equity = side.slider("자기자본 (억원)", 5, 50, value=12) * 10000
-loan = side.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
+input_column.subheader("투자 계획")
+equity = input_column.slider("자기자본 (억원)", 5, 50, value=12) * 10000
+loan = input_column.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
 
-side.subheader("변수")
-construction_cost = side.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
-interest_rate = side.slider("금리 (%)", 0.0, 10.0, value=3.0)
-construction_cost = side.slider("공실률 (%)", 0, 40, value=10)
+input_column.subheader("변수")
+construction_cost = input_column.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
+interest_rate = input_column.slider("금리 (%)", 0.0, 10.0, value=3.0)
+construction_cost = input_column.slider("공실률 (%)", 0, 40, value=10)
 
-side.subheader("필터")
-side.checkbox("예산 내의 필지만 표시하기")
+input_column.subheader("필터")
+input_column.checkbox("예산 내의 필지만 표시하기")
 
-info.header("정보")
+info_column.header("정보")
+info_column.text_input("필지 ID를 입력하세요.", value="")
 
-guide.header("안내")
+guide_column.header("안내")
 
-guide.markdown(
+guide_column.markdown(
     r"""
 이 시스템은 예상 연면적과 해당 지역의 공공데이터를 기반으로 대략적인 월세를 계산한 후,
 현금 지출을 차감하여 내부수익률을 산출한 후 지도에 표시합니다.
 """
 )
-guide.latex(
+guide_column.latex(
     r"""
 F = A*f*(1-v/100)
 \\
@@ -94,7 +95,7 @@ R = F - 0.05*F - t(p) - i*l
 r = \frac{R}{e}*100
 """,
 )
-guide.markdown(
+guide_column.markdown(
     r"""
 계산 과정에서 도출되는 변수들은 다음과 같습니다.
 
