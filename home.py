@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import pydeck as pdk
@@ -19,9 +20,9 @@ st.checkbox("예산 내의 필지만 표시하기")
 
 map_data = pd.DataFrame(
     {
-        "lat": np.random.randn(1000) / 50 + 37.5519,
-        "lon": np.random.randn(1000) / 50 + 126.9918,
-        "id": np.arange(1000),
+        "lat": np.random.randn(50000) / 50 + 37.5519,
+        "lon": np.random.randn(50000) / 50 + 126.9918,
+        "id": np.arange(50000),
         "text": "필지 정보...",
     }
 )
@@ -34,9 +35,7 @@ def on_point_click(widget_instance, payload):
 deck = pdk.Deck(
     map_style="dark",
     initial_view_state=pdk.ViewState(
-        latitude=37.5519,
-        longitude=126.9918,
-        zoom=8,
+        latitude=37.5519, longitude=126.9918, zoom=8, controller=True
     ),
     tooltip={
         "text": "{text}\n임시 ID: {id}",
@@ -61,16 +60,17 @@ deck = pdk.Deck(
         pdk.Layer(
             "ScatterplotLayer",
             data=map_data,
-            get_position="[lon, lat]",
-            radius_pixels=4,
-            get_color="[255,255,255,id/3]",
-            get_radius=8,
+            get_position=["lon", "lat"],
+            point_size=3,
+            get_color=[255, 255, 255, "id/30"],
             pickable=True,
+            auto_highlight=True,
         ),
     ],
 )
 deck.deck_widget.on_click(on_point_click)
-st.pydeck_chart(deck)
+html_content: str = deck.to_html(as_string=True)  # type:ignore
+components.html(html_content, height=800)
 
 st.markdown(
     r"""
