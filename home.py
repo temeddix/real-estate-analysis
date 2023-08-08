@@ -21,7 +21,7 @@ if "is_session_ready" not in st.session_state.keys():
 @st.cache_data
 def draw_map(equity: int, loan: int) -> str:
     geo_data = geopandas.read_file(
-        "./open_data/basic_building_info/AL_11_D162_20230120.shp",
+        "./open_data/basic_building_info/AL_29_D164_20230125.shp",
         encoding="euc-kr",
     )
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
