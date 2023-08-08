@@ -65,7 +65,7 @@ def draw_map() -> str:
 
 a = components.html(draw_map(), height=600)
 
-input_column, info_column, guide_column = st.columns((1, 2, 1))
+input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
 input_column.header("요인 입력")
 
