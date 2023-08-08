@@ -32,7 +32,7 @@ def on_point_click(widget_instance, payload):
 
 
 deck = pdk.Deck(
-    map_style="dark",  # type: ignore
+    map_style="dark",
     initial_view_state=pdk.ViewState(
         latitude=37.5519,
         longitude=126.9918,
