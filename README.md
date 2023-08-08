@@ -25,8 +25,8 @@
 ```json
 real-estate-analysis/
 ├── open_data/
-│   └── basic_building_info/ // GIS건물일반집합정보(SHP)
-│       ├── AL_11_D162_20230120.shp
+│   └── announced_land_price/ // 표준지공시지가정보(SHP)
+│       ├── AL_11_D152_20220929.shp
 │       └── ...
 ├── processed_data/
 │   └── ...

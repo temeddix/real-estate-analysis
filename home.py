@@ -21,7 +21,7 @@ if "is_session_ready" not in st.session_state.keys():
 @st.cache_data
 def draw_map(equity: int, loan: int) -> str:
     geo_data = geopandas.read_file(
-        "./open_data/basic_building_info/AL_29_D164_20230125.shp",
+        "./open_data/announced_land_price/AL_11_D152_20220929.shp",
         encoding="euc-kr",
     )
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
@@ -75,8 +75,6 @@ def draw_map(equity: int, loan: int) -> str:
                 get_position=["lon", "lat"],
                 point_size=3,
                 get_color=[255, 255, 255, "id/30"],
-                pickable=True,
-                auto_highlight=True,
             ),
             pydeck.Layer(
                 "GeoJsonLayer",
@@ -84,6 +82,8 @@ def draw_map(equity: int, loan: int) -> str:
                 opacity=0.8,
                 filled=True,
                 get_fill_color=[255, 0, 0],
+                pickable=True,
+                auto_highlight=True,
             ),
         ],
     )
