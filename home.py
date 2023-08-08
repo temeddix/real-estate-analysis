@@ -6,7 +6,8 @@ import pydeck
 
 st.set_page_config(layout="wide")
 
-if "equity" not in st.session_state.keys():
+if "is_session_ready" not in st.session_state.keys():
+    st.session_state["is_session_ready"] = None
     st.session_state["equity"] = 12  # 자기자본
     st.session_state["loan"] = 20  # 은행 대출 한도
     st.session_state["construction_cost"] = 280  # 제곱미터당 공사비
