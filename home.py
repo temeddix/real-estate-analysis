@@ -100,7 +100,7 @@ components.html(
     height=600,
 )
 html_size = convert_size(len(html_content.encode("utf-8")))
-st.caption(f"지도 용량은 {html_size}입니다.")
+st.caption(f"지도 데이터 용량은 {html_size}입니다.")
 
 input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
