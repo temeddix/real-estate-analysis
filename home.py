@@ -4,19 +4,7 @@ import pandas as pd
 import numpy as np
 import pydeck as pdk
 
-
-st.sidebar.header("투자 계획")
-
-equity = st.sidebar.slider("자기자본 (억원)", 5, 50, value=12) * 10000
-loan = st.sidebar.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
-
-st.sidebar.header("요인")
-
-construction_cost = st.sidebar.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
-interest_rate = st.sidebar.slider("금리 (%)", 0.0, 10.0, value=3.0)
-construction_cost = st.sidebar.slider("공실률 (%)", 0, 40, value=10)
-
-st.checkbox("예산 내의 필지만 표시하기")
+st.set_page_config(layout="wide")
 
 map_data = pd.DataFrame(
     {
@@ -26,12 +14,6 @@ map_data = pd.DataFrame(
         "text": "필지 정보...",
     }
 )
-
-
-def on_point_click(widget_instance, payload):
-    print("YAHOO")
-
-
 deck = pdk.Deck(
     map_style="dark",
     initial_view_state=pdk.ViewState(
@@ -68,17 +50,36 @@ deck = pdk.Deck(
         ),
     ],
 )
-deck.deck_widget.on_click(on_point_click)
 html_content: str = deck.to_html(as_string=True)  # type:ignore
-components.html(html_content, height=800)
+components.html(html_content, height=600)
 
-st.markdown(
+side, info, guide = st.columns((1, 2, 1))
+
+side.header("요인 입력")
+
+side.subheader("투자 계획")
+equity = side.slider("자기자본 (억원)", 5, 50, value=12) * 10000
+loan = side.slider("은행 대출 한도 (억원)", 10, 100, value=18) * 10000
+
+side.subheader("변수")
+construction_cost = side.slider("제곱미터당 공사비 (만원)", 200, 400, value=280)
+interest_rate = side.slider("금리 (%)", 0.0, 10.0, value=3.0)
+construction_cost = side.slider("공실률 (%)", 0, 40, value=10)
+
+side.subheader("필터")
+side.checkbox("예산 내의 필지만 표시하기")
+
+info.header("정보")
+
+guide.header("안내")
+
+guide.markdown(
     r"""
 이 시스템은 예상 연면적과 해당 지역의 공공데이터를 기반으로 대략적인 월세를 계산한 후,
 현금 지출을 차감하여 내부수익률을 산출한 후 지도에 표시합니다.
 """
 )
-st.latex(
+guide.latex(
     r"""
 F = A*f*(1-v/100)
 \\
@@ -87,7 +88,7 @@ R = F - 0.05*F - t(p) - i*l
 r = \frac{R}{e}*100
 """,
 )
-st.markdown(
+guide.markdown(
     r"""
 계산 과정에서 도출되는 변수들은 다음과 같습니다.
 
