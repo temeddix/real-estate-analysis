@@ -2,6 +2,7 @@ import json
 import math
 import os
 import geopandas
+import streamlit as st
 
 
 def format_json(input: str, item_limit: int = 5) -> str:
@@ -29,6 +30,7 @@ def convert_size(size_bytes: int) -> str:
     return "%s %s" % (s, size_name[i])
 
 
+@st.cache_resource
 def read_geofile(path: str) -> geopandas.GeoDataFrame:
     # 가능하다면 원본이 아닌 가공된 데이터를 사용합니다.
     # 내용물은 같지만, 읽고 쓰는 속도가 훨씬 빠르고 크기도 작기 때문입니다.
