@@ -42,13 +42,13 @@ def read_geofile(path: str) -> geopandas.GeoDataFrame:
     else:
         # 가공된 데이터가 없다면 만들거나 다운로드해야 합니다.
         if os.path.isfile(downloaded_filepath):
-            # 공공데이터가 준비되어 있다면 그걸 읽습니다.
+            # 원본 공공데이터가 준비되어 있다면 그걸 읽습니다.
             geo_data = geopandas.read_file(
                 downloaded_filepath,
                 encoding="euc-kr",
             )
         else:
-            # 공공데이터가 다운로드되지 않았다면 NAS 파일을 받습니다.
+            # 공공데이터가 다운로드되지 않았다면 가공된 파일을 NAS로부터 받습니다.
             # 배포된 클라우드 서버에서는 파일 준비에 이 절차가 필요합니다.
             geo_data = geopandas.read_parquet(
                 online_url,
