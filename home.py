@@ -90,6 +90,15 @@ html_content = draw_map(
     st.session_state["equity"],
     st.session_state["loan"],
 )
+# `st.pyplot_chart`로도 충분히 `pydeck` 지도를 표시할 수 있지만,
+# 알 수 없는 이유로 현저한 성능 저하가 발생하여
+# 지도 항목 개수가 수 만 개만 넘어가더라도 지나치게 느려집니다.
+# https://github.com/streamlit/streamlit/issues/5532
+# 이 문제를 피해 가기 위해 일단 `pydeck` 지도를 HTML로 변환한 후
+# `streamlit` 라이브러리의 `components.html`로 표시하고 있습니다.
+# 이 방법으로는 지도 항목 개수가 수십만 개 이상이 되어도 괜찮으나,
+# 그 정도로 항목이 많아지면 필지 용량 조절에 신경써야 합니다.
+# 필지 용량 데이터는 대략 200MB 아래로 조절해야 페이지 로딩 속도가 합리적일 것입니다.
 components.html(
     html_content,
     height=720,
