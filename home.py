@@ -30,7 +30,7 @@ def draw_lands(equity: int, loan: int) -> Tuple[str, pd.DataFrame]:
     raw_land_data: geopandas.GeoDataFrame = raw_land_data.to_crs(
         epsg=4326
     )  # type:ignore
-    rows_to_keep = int(len(raw_land_data) * 0.1)
+    rows_to_keep = int(len(raw_land_data) * 0.02)
     land_data: pd.DataFrame = raw_land_data.sample(rows_to_keep)
     land_data = land_data[land_data["A8"] == "개인"]
 
@@ -63,8 +63,8 @@ def draw_lands(equity: int, loan: int) -> Tuple[str, pd.DataFrame]:
                 opacity=0.1,
                 get_position=["lon", "lat"],
                 aggregation="MEAN",
-                get_weight="A11/1000",
-                threshold=0.6,
+                get_weight="A22/1000",
+                threshold=0.2,
                 color_range=[
                     [0, 63, 0],
                     [63, 255, 0],
@@ -78,7 +78,7 @@ def draw_lands(equity: int, loan: int) -> Tuple[str, pd.DataFrame]:
                 opacity=0.8,
                 filled=True,
                 extruded=True,
-                get_elevation="A11/10",
+                get_elevation="A22/10",
                 get_fill_color=[255, 40, 40],
                 pickable=True,
                 auto_highlight=True,
