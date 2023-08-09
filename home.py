@@ -1,7 +1,7 @@
+from typing import Tuple
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
-import numpy as np
 import pydeck
 import geopandas
 
@@ -23,15 +23,20 @@ if "is_session_ready" not in st.session_state.keys():
 
 
 @st.cache_data
-def draw_map(equity: int, loan: int) -> str:
-    geo_data = read_geofile("announced_land_price/AL_11_D152_20220929")
+def draw_lands(equity: int, loan: int) -> Tuple[str, pd.DataFrame]:
+    raw_land_data = read_geofile("ownership_info/AL_11_D160_20230525")
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
     # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
-    geo_data: geopandas.GeoDataFrame = geo_data.to_crs(epsg=4326)  # type:ignore
+    raw_land_data: geopandas.GeoDataFrame = raw_land_data.to_crs(
+        epsg=4326
+    )  # type:ignore
+    rows_to_keep = int(len(raw_land_data) * 0.1)
+    land_data: pd.DataFrame = raw_land_data.sample(rows_to_keep)
+    land_data = land_data[land_data["A8"] == "개인"]
 
     # 해당 대지를 그리는 폴리곤 데이터의 평균으로 위도와 경도 행을 추가합니다.
-    geo_data["lat"] = geo_data["geometry"].centroid.y  # type:ignore
-    geo_data["lon"] = geo_data["geometry"].centroid.x  # type:ignore
+    land_data["lat"] = land_data["geometry"].centroid.y  # type:ignore
+    land_data["lon"] = land_data["geometry"].centroid.x  # type:ignore
 
     deck = pydeck.Deck(
         map_style="dark",
@@ -54,7 +59,7 @@ def draw_map(equity: int, loan: int) -> str:
         layers=[
             pydeck.Layer(
                 "HeatmapLayer",
-                data=geo_data,
+                data=land_data,
                 opacity=0.1,
                 get_position=["lon", "lat"],
                 aggregation="MEAN",
@@ -69,7 +74,7 @@ def draw_map(equity: int, loan: int) -> str:
             ),
             pydeck.Layer(
                 "GeoJsonLayer",
-                data=geo_data,
+                data=land_data,
                 opacity=0.8,
                 filled=True,
                 extruded=True,
@@ -83,10 +88,10 @@ def draw_map(equity: int, loan: int) -> str:
     html_content: str = deck.to_html(as_string=True)  # type:ignore
     custom_css = "body { font-family: sans-serif; }"
     html_content = insert_custom_css(html_content, custom_css)
-    return html_content
+    return html_content, land_data
 
 
-html_content = draw_map(
+html_content, land_data = draw_lands(
     st.session_state["equity"],
     st.session_state["loan"],
 )
@@ -105,6 +110,8 @@ components.html(
 )
 html_size = convert_size(len(html_content.encode("utf-8")))
 st.caption(f"내부적으로 생성된 필지 데이터의 용량은 {html_size}입니다.")
+with st.expander("필지 데이터 일부"):
+    st.dataframe(land_data.head(10).astype(str))
 
 input_column, info_column, guide_column = st.columns((1, 2, 1), gap="medium")
 
