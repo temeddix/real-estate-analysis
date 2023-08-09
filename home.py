@@ -128,7 +128,7 @@ input_column.subheader("필터")
 input_column.checkbox("예산 내의 필지만 표시하기")
 
 info_column.header("정보")
-info_column.text_input("필지 ID를 입력하세요.", value="")
+info_column.text_input("필지 주소를 입력하세요.", value="")
 
 guide_column.header("안내")
 guide_column.markdown(
