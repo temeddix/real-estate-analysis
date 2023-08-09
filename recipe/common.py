@@ -30,26 +30,31 @@ def convert_size(size_bytes: int) -> str:
 
 
 def read_geofile(path: str) -> geopandas.GeoDataFrame:
+    # 가능하다면 원본이 아닌 가공된 데이터를 사용합니다.
+    # 내용물은 같지만, 읽고 쓰는 속도가 훨씬 빠르고 크기도 작기 때문입니다.
     downloaded_filepath = f"./downloaded_data/{path}.shp"
     processed_filepath = f"./processed_data/{path}.parquet"
     online_url = f"sftp://kdhns.synology.me:5022/KDHPF/real-estate-analysis/processed_data/{path}.parquet"
 
     if os.path.isfile(processed_filepath):
+        # 가공된 데이터가 준비되어 있다면 그걸 읽습니다.
         geo_data = geopandas.read_parquet(processed_filepath)
     else:
-        # 공공데이터가 준비되어 있다면 그걸 읽습니다.
+        # 가공된 데이터가 없다면 만들거나 다운로드해야 합니다.
         if os.path.isfile(downloaded_filepath):
+            # 공공데이터가 준비되어 있다면 그걸 읽습니다.
             geo_data = geopandas.read_file(
                 downloaded_filepath,
                 encoding="euc-kr",
             )
-        # 공공데이터가 다운로드되지 않았다면 NAS 파일을 받습니다.
-        # 배포된 클라우드에서는 파일 준비에 이 절차가 필요합니다.
         else:
+            # 공공데이터가 다운로드되지 않았다면 NAS 파일을 받습니다.
+            # 배포된 클라우드 서버에서는 파일 준비에 이 절차가 필요합니다.
             geo_data = geopandas.read_parquet(
                 online_url,
                 storage_options={"username": "anonymous", "password": ""},
             )
+        # 가공된 데이터를 저장해 놓습니다.
         processed_directory = os.path.dirname(processed_filepath)
         os.makedirs(processed_directory, exist_ok=True)
         geo_data.to_parquet(processed_filepath)
