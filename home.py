@@ -74,7 +74,7 @@ def draw_map(equity: int, loan: int) -> str:
                 filled=True,
                 extruded=True,
                 get_elevation="A11/10",
-                get_fill_color=[255, 0, 0],
+                get_fill_color=[255, 40, 40],
                 pickable=True,
                 auto_highlight=True,
             ),
