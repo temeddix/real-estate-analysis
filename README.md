@@ -22,10 +22,10 @@
 
 개방데이터를 담을 때나 가공 데이터를 생성할 때에는 아래 폴더 구조를 지켜주세요. 모든 Python 코드는 이와 같은 경로로 데이터 파일이 준비되어 있다고 간주합니다.
 
-```json
+```
 real-estate-analysis/
 ├── open_data/
-│   └── announced_land_price/ // 표준지공시지가정보(SHP)
+│   └── announced_land_price/
 │       ├── AL_11_D152_20220929.shp
 │       └── ...
 ├── processed_data/
