@@ -5,12 +5,11 @@ import pandas as pd
 import pydeck
 import geopandas
 
-pd.set_option("display.max_columns", None)
-
 from recipe.common import convert_size
 from recipe.common import read_geofile
 from recipe.common import insert_custom_css
 
+pd.set_option("display.max_columns", None)
 st.set_page_config(layout="wide")
 
 if "is_session_ready" not in st.session_state.keys():
@@ -27,9 +26,7 @@ def draw_lands(equity: int, loan: int) -> Tuple[str, pd.DataFrame]:
     raw_land_data = read_geofile("ownership_info/AL_11_D160_20230525")
     # 정부 공공데이터의 SHP 파일에서 사용하는 좌표계는 EPSG:5174입니다.
     # EPSG:4326이 흔히 사용하는 WGS84, 즉 위도/경도 시스템입니다.
-    raw_land_data: geopandas.GeoDataFrame = raw_land_data.to_crs(
-        epsg=4326
-    )  # type:ignore
+    raw_land_data: geopandas.GeoDataFrame = raw_land_data.to_crs(epsg=4326)  # type:ignore
     rows_to_keep = int(len(raw_land_data) * 0.02)
     land_data: pd.DataFrame = raw_land_data.sample(rows_to_keep)
     land_data = land_data[land_data["A8"] == "개인"]
