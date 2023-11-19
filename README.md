@@ -50,7 +50,7 @@ poetry shell
 코드 실행하기:
 
 ```
-streamlit run home.py
+streamlit run real_estate_analysis.py
 ```
 
 # 규칙
