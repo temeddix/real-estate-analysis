@@ -56,4 +56,4 @@ streamlit run real_estate_analysis.py
 # 규칙
 
 - 가능한 한 언제나 함수 매개변수와 전역 변수에 적절한 타입 힌트를 제공해 주세요. 또한 사용 중인 IDE에서 Basic 수준의 타입 검사를 켜 두세요.
-- [Black](https://github.com/psf/black) 서식기를 사용하세요.
+- [Ruff](https://github.com/astral-sh/ruff) 서식기를 사용하세요.
