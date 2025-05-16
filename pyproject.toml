@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Analyzing Korean real-estate dynamically with public open data"
 authors = [
     { name = "Hyunsung Ro" },
-    { name = "DongHyun Kim", email = "temeddix@gmail.com" },
+    { name = "Danny Kim", email = "temeddix@gmail.com" },
 ]
 requires-python = ">=3.12"
 dependencies = [
