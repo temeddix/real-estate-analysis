@@ -1,24 +1,8 @@
-import json
 import math
 import os
 
 import geopandas
 import streamlit as st
-
-
-def format_json(input: str, item_limit: int = 5) -> str:
-    structure = json.loads(input)
-    if isinstance(structure, list):
-        structure = structure[:item_limit]
-    if isinstance(structure, dict):
-        for item_key, item_value in structure.items():
-            if isinstance(item_value, list):
-                structure[item_key] = item_value[:item_limit]
-    return json.dumps(
-        structure,
-        indent=2,
-        ensure_ascii=False,
-    )
 
 
 def convert_size(size_bytes: int) -> str:
@@ -41,26 +25,26 @@ def read_geofile(path: str) -> geopandas.GeoDataFrame:
 
     if os.path.isfile(processed_filepath):
         # 가공된 데이터가 준비되어 있다면 그걸 읽습니다.
-        geo_data = geopandas.read_parquet(processed_filepath)
+        geo_data = geopandas.read_parquet(processed_filepath)  # type:ignore
     else:
         # 가공된 데이터가 없다면 만들거나 다운로드해야 합니다.
         if os.path.isfile(downloaded_filepath):
             # 원본 공공데이터가 준비되어 있다면 그걸 읽습니다.
-            geo_data = geopandas.read_file(
+            geo_data = geopandas.read_file(  # type:ignore
                 downloaded_filepath,
                 encoding="euc-kr",
             )
         else:
             # 공공데이터가 다운로드되지 않았다면 가공된 파일을 NAS로부터 받습니다.
             # 배포된 클라우드 서버에서는 파일 준비에 이 절차가 필요합니다.
-            geo_data = geopandas.read_parquet(
+            geo_data = geopandas.read_parquet(  # type:ignore
                 online_url,
                 storage_options={"username": "anonymous", "password": ""},
             )
         # 가공된 데이터를 저장해 놓습니다.
         processed_directory = os.path.dirname(processed_filepath)
         os.makedirs(processed_directory, exist_ok=True)
-        geo_data.to_parquet(processed_filepath)
+        geo_data.to_parquet(processed_filepath)  # type:ignore
 
     return geo_data
 

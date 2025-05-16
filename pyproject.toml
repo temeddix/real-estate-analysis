@@ -6,7 +6,7 @@ authors = [
     { name = "Hyunsung Ro" },
     { name = "DongHyun Kim", email = "temeddix@gmail.com" },
 ]
-requires-python = ">=3.9, !=3.9.7"
+requires-python = ">=3.12"
 dependencies = [
     "streamlit==1.28.2",
     "pydeck==0.8.0",
@@ -23,6 +23,9 @@ dev = ["ruff"]
 
 [tool.ruff]
 extend-select = ["N", "I"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
 
 [build-system]
 requires = ["hatchling"]

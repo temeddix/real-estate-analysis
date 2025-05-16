@@ -1,7 +1,7 @@
 import paramiko
 
 
-def download_sftp_file_as_string(url):
+def download_sftp_file_as_string(url: str) -> str:
     # Parse the URL to extract hostname, port, and file path
     parts = url.split("/")
     hostname = parts[2].split(":")[0]
